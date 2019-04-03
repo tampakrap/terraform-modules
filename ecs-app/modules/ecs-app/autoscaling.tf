@@ -12,7 +12,7 @@ resource "aws_appautoscaling_target" "ecs_target" {
 /* metric used for auto scale */
 resource "aws_cloudwatch_metric_alarm" "service_cpu_mem_high" {
   count               = "${var.autoscaling ? 1 : 0}"
-  alarm_name          = "${local.name_underscore}_cpu_or_mem_utilization_high"
+  alarm_name          = "${local.name_underscore}_cpu_or_mem_high"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   threshold           = "${var.scale_up}"
@@ -50,8 +50,8 @@ resource "aws_cloudwatch_metric_alarm" "service_cpu_mem_high" {
   }
 
   metric_query {
-    id          = "MAX"
-    label       = "Maximum of CPU/MEM"
+    id          = "max"
+    label       = "CpuOrMemUtilization"
     expression  = "MAX(METRICS())"
     return_data = "true"
   }
@@ -63,7 +63,7 @@ resource "aws_cloudwatch_metric_alarm" "service_cpu_mem_high" {
 
 resource "aws_cloudwatch_metric_alarm" "service_cpu_mem_low" {
   count               = "${var.autoscaling ? 1 : 0}"
-  alarm_name          = "${local.name_underscore}_cpu_or_mem_utilization_low"
+  alarm_name          = "${local.name_underscore}_cpu_or_mem_low"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "1"
   threshold           = "${var.scale_down}"
@@ -101,8 +101,8 @@ resource "aws_cloudwatch_metric_alarm" "service_cpu_mem_low" {
   }
 
   metric_query {
-    id          = "MAX"
-    label       = "Maximum of CPU/MEM"
+    id          = "max"
+    label       = "CpuOrMemUtilization"
     expression  = "MAX(METRICS())"
     return_data = "true"
   }
