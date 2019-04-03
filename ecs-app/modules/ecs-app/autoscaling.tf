@@ -10,106 +10,46 @@ resource "aws_appautoscaling_target" "ecs_target" {
 }
 
 /* metric used for auto scale */
-resource "aws_cloudwatch_metric_alarm" "service_cpu_mem_high" {
+resource "aws_cloudwatch_metric_alarm" "service_cpu_high" {
   count               = "${var.autoscaling ? 1 : 0}"
-  alarm_name          = "${local.name_underscore}_cpu_or_mem_high"
+  alarm_name          = "${local.name_underscore}_cpu_utilization_high"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/ECS"
+  period              = "60"
+  statistic           = "Average"
   threshold           = "${var.scale_up}"
 
-  metric_query {
-    id = "cpu"
-
-    metric {
-      metric_name = "CPUUtilization"
-      namespace   = "AWS/ECS"
-      period      = "60"
-      stat        = "Average"
-
-      dimensions = {
-        ClusterName = "${var.cluster_name}"
-        ServiceName = "${var.name}"
-      }
-    }
+  dimensions {
+    ClusterName = "${var.cluster_name}"
+    ServiceName = "${var.name}"
   }
 
-  metric_query {
-    id = "mem"
+  alarm_actions = ["${aws_appautoscaling_policy.up.arn}"]
 
-    metric {
-      metric_name = "MemoryUtilization"
-      namespace   = "AWS/ECS"
-      period      = "60"
-      stat        = "Average"
-
-      dimensions = {
-        ClusterName = "${var.cluster_name}"
-        ServiceName = "${var.name}"
-      }
-    }
-  }
-
-  metric_query {
-    id          = "max"
-    label       = "CpuOrMemUtilization"
-    expression  = "MAX(METRICS())"
-    return_data = "true"
-  }
-
-  alarm_actions = [
-    "${aws_appautoscaling_policy.up.arn}",
-  ]
+  depends_on = ["${aws_appautoscaling_policy.up.arn}"]
 }
 
-resource "aws_cloudwatch_metric_alarm" "service_cpu_mem_low" {
+resource "aws_cloudwatch_metric_alarm" "service_cpu_low" {
   count               = "${var.autoscaling ? 1 : 0}"
-  alarm_name          = "${local.name_underscore}_cpu_or_mem_low"
+  alarm_name          = "${local.name_underscore}_cpu_utilization_low"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "1"
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/ECS"
+  period              = "60"
+  statistic           = "Average"
   threshold           = "${var.scale_down}"
 
-  metric_query {
-    id = "cpu"
-
-    metric {
-      metric_name = "CPUUtilization"
-      namespace   = "AWS/ECS"
-      period      = "60"
-      stat        = "Average"
-
-      dimensions = {
-        ClusterName = "${var.cluster_name}"
-        ServiceName = "${var.name}"
-      }
-    }
+  dimensions {
+    ClusterName = "${var.cluster_name}"
+    ServiceName = "${var.name}"
   }
 
-  metric_query {
-    id = "mem"
+  alarm_actions = ["${aws_appautoscaling_policy.down.arn}"]
 
-    metric {
-      metric_name = "MemoryUtilization"
-      namespace   = "AWS/ECS"
-      period      = "60"
-      stat        = "Average"
-
-      dimensions = {
-        ClusterName = "${var.cluster_name}"
-        ServiceName = "${var.name}"
-      }
-    }
-  }
-
-  metric_query {
-    id          = "max"
-    label       = "CpuOrMemUtilization"
-    expression  = "MAX(METRICS())"
-    return_data = "true"
-  }
-
-  alarm_actions = [
-    "${aws_appautoscaling_policy.down.arn}",
-  ]
+  depends_on = ["${aws_appautoscaling_policy.up.arn}"]
 }
 
 resource "aws_appautoscaling_policy" "up" {
