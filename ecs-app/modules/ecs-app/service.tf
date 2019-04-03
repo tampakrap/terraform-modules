@@ -3,7 +3,7 @@ data "aws_ecs_task_definition" "application" {
 }
 
 resource "aws_ecs_service" "application" {
-  count   = "${var.autoscaling == "false" ? 1 : 0}"
+  count   = "${var.autoscaling ? 0 : 1}"
   name    = "${var.name}"
   cluster = "${data.aws_ecs_cluster.ecs.arn}"
 
@@ -35,7 +35,7 @@ resource "aws_ecs_service" "application" {
 }
 
 resource "aws_ecs_service" "application_autoscaled" {
-  count   = "${var.autoscaling == "true" ? 1 : 0}"
+  count   = "${var.autoscaling ? 1 : 0}"
   name    = "${var.name}"
   cluster = "${data.aws_ecs_cluster.ecs.arn}"
 
