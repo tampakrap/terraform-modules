@@ -77,7 +77,7 @@ resource "aws_cloudwatch_metric_alarm" "service_cpu_mem_low" {
       period      = "60"
       stat        = "Average"
 
-      dimensions {
+      dimensions = {
         ClusterName = "${var.cluster_name}"
         ServiceName = "${var.name}"
       }
@@ -93,7 +93,7 @@ resource "aws_cloudwatch_metric_alarm" "service_cpu_mem_low" {
       period      = "60"
       stat        = "Average"
 
-      dimensions {
+      dimensions = {
         ClusterName = "${var.cluster_name}"
         ServiceName = "${var.name}"
       }
