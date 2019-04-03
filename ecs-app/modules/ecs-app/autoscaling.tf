@@ -17,27 +17,35 @@ resource "aws_cloudwatch_metric_alarm" "service_cpu_mem_high" {
   evaluation_periods  = "1"
   threshold           = "${var.scale_up}"
 
-  metric {
-    metric_name = "CPUUtilization"
-    namespace   = "AWS/ECS"
-    period      = "60"
-    statistic   = "Average"
+  metric_query {
+    id = "cpu"
 
-    dimensions {
-      ClusterName = "${var.cluster_name}"
-      ServiceName = "${var.name}"
+    metric {
+      metric_name = "CPUUtilization"
+      namespace   = "AWS/ECS"
+      period      = "60"
+      stat        = "Average"
+
+      dimensions {
+        ClusterName = "${var.cluster_name}"
+        ServiceName = "${var.name}"
+      }
     }
   }
 
-  metric {
-    metric_name = "MemoryUtilization"
-    namespace   = "AWS/ECS"
-    period      = "60"
-    statistic   = "Average"
+  metric_query {
+    id = "mem"
 
-    dimensions {
-      ClusterName = "${var.cluster_name}"
-      ServiceName = "${var.name}"
+    metric {
+      metric_name = "MemoryUtilization"
+      namespace   = "AWS/ECS"
+      period      = "60"
+      stat        = "Average"
+
+      dimensions {
+        ClusterName = "${var.cluster_name}"
+        ServiceName = "${var.name}"
+      }
     }
   }
 
