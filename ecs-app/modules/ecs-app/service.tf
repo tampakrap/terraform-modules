@@ -12,6 +12,7 @@ resource "aws_ecs_service" "application" {
   launch_type                        = "FARGATE"
   deployment_maximum_percent         = "${var.max_healthy}"
   deployment_minimum_healthy_percent = "${var.min_healthy}"
+  health_check_grace_period_seconds  = "${var.healthcheck_grace}"
 
   network_configuration {
     subnets         = ["${var.private_subnet_ids}"]

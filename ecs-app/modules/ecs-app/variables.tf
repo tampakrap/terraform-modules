@@ -149,3 +149,7 @@ variable "healthcheck_unhealthy_threshold" {
 variable "healthcheck_matcher" {
   default = "200"
 }
+
+variable "healthcheck_grace" {
+  default = 0
+}
