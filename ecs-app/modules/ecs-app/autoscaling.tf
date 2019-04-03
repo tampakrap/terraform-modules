@@ -1,5 +1,4 @@
 resource "aws_appautoscaling_target" "ecs_target" {
-  count              = "${var.autoscaling ? 1 : 0}"
   max_capacity       = "${var.max_capacity}"
   min_capacity       = "${var.min_capacity}"
   resource_id        = "service/${var.cluster_name}/${var.name}"
@@ -11,7 +10,6 @@ resource "aws_appautoscaling_target" "ecs_target" {
 
 /* metric used for auto scale */
 resource "aws_cloudwatch_metric_alarm" "service_cpu_high" {
-  count               = "${var.autoscaling ? 1 : 0}"
   alarm_name          = "${local.name_underscore}_cpu_utilization_high"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
@@ -32,7 +30,6 @@ resource "aws_cloudwatch_metric_alarm" "service_cpu_high" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "service_cpu_low" {
-  count               = "${var.autoscaling ? 1 : 0}"
   alarm_name          = "${local.name_underscore}_cpu_utilization_low"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "1"
@@ -53,7 +50,6 @@ resource "aws_cloudwatch_metric_alarm" "service_cpu_low" {
 }
 
 resource "aws_appautoscaling_policy" "up" {
-  count              = "${var.autoscaling ? 1 : 0}"
   name               = "${local.name_underscore}_scale_up"
   service_namespace  = "ecs"
   resource_id        = "service/${var.cluster_name}/${var.name}"
@@ -76,7 +72,6 @@ resource "aws_appautoscaling_policy" "up" {
 }
 
 resource "aws_appautoscaling_policy" "down" {
-  count              = "${var.autoscaling ? 1 : 0}"
   name               = "${local.name_underscore}_scale_down"
   service_namespace  = "ecs"
   resource_id        = "service/${var.cluster_name}/${var.name}"
