@@ -10,20 +10,41 @@ resource "aws_appautoscaling_target" "ecs_target" {
 }
 
 /* metric used for auto scale */
-resource "aws_cloudwatch_metric_alarm" "service_cpu_high" {
+resource "aws_cloudwatch_metric_alarm" "service_cpu_mem_high" {
   count               = "${var.autoscaling ? 1 : 0}"
-  alarm_name          = "${local.name_underscore}_cpu_utilization_high"
+  alarm_name          = "${local.name_underscore}_cpu_or_mem_utilization_high"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = "CPUUtilization"
-  namespace           = "AWS/ECS"
-  period              = "60"
-  statistic           = "Average"
   threshold           = "${var.scale_up}"
 
-  dimensions {
-    ClusterName = "${var.cluster_name}"
-    ServiceName = "${var.name}"
+  metric {
+    metric_name = "CPUUtilization"
+    namespace   = "AWS/ECS"
+    period      = "60"
+    statistic   = "Average"
+
+    dimensions {
+      ClusterName = "${var.cluster_name}"
+      ServiceName = "${var.name}"
+    }
+  }
+
+  metric {
+    metric_name = "MemoryUtilization"
+    namespace   = "AWS/ECS"
+    period      = "60"
+    statistic   = "Average"
+
+    dimensions {
+      ClusterName = "${var.cluster_name}"
+      ServiceName = "${var.name}"
+    }
+  }
+
+  metric_query {
+    id         = "MAX"
+    label      = "Maximum of CPU/MEM"
+    expression = "MAX(METRICS())"
   }
 
   alarm_actions = [
@@ -31,20 +52,41 @@ resource "aws_cloudwatch_metric_alarm" "service_cpu_high" {
   ]
 }
 
-resource "aws_cloudwatch_metric_alarm" "service_cpu_low" {
+resource "aws_cloudwatch_metric_alarm" "service_cpu_mem_low" {
   count               = "${var.autoscaling ? 1 : 0}"
-  alarm_name          = "${local.name_underscore}_cpu_utilization_low"
+  alarm_name          = "${local.name_underscore}_cpu_or_mem_utilization_low"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "1"
-  metric_name         = "CPUUtilization"
-  namespace           = "AWS/ECS"
-  period              = "60"
-  statistic           = "Average"
   threshold           = "${var.scale_down}"
 
-  dimensions {
-    ClusterName = "${var.cluster_name}"
-    ServiceName = "${var.name}"
+  metric {
+    metric_name = "CPUUtilization"
+    namespace   = "AWS/ECS"
+    period      = "60"
+    statistic   = "Average"
+
+    dimensions {
+      ClusterName = "${var.cluster_name}"
+      ServiceName = "${var.name}"
+    }
+  }
+
+  metric {
+    metric_name = "MemoryUtilization"
+    namespace   = "AWS/ECS"
+    period      = "60"
+    statistic   = "Average"
+
+    dimensions {
+      ClusterName = "${var.cluster_name}"
+      ServiceName = "${var.name}"
+    }
+  }
+
+  metric_query {
+    id         = "MAX"
+    label      = "Maximum of CPU/MEM"
+    expression = "MAX(METRICS())"
   }
 
   alarm_actions = [
