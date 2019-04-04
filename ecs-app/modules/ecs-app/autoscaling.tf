@@ -5,7 +5,7 @@ resource "aws_appautoscaling_target" "ecs_target" {
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
 
-  depends_on = ["aws_ecs_service.application"]
+  depends_on = ["aws_ecs_service.application_autoscaled"]
 }
 
 /* metric used for auto scale */
