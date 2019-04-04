@@ -1,5 +1,6 @@
 data "aws_ecs_task_definition" "application" {
   task_definition = "${aws_ecs_task_definition.application.family}"
+  depends_on      = ["aws_ecs_task_definition.application"]
 }
 
 resource "aws_ecs_service" "application" {
