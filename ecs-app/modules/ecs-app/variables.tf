@@ -101,11 +101,6 @@ variable "policy" {
   default     = ""
 }
 
-variable "autoscaling" {
-  description = "enable autoscaling"
-  default     = false
-}
-
 variable "max_capacity" {
   default = 1
 }
