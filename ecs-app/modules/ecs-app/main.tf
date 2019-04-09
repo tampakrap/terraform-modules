@@ -19,3 +19,7 @@ data "aws_region" "current" {}
 data "aws_ecs_cluster" "ecs" {
   cluster_name = "${var.cluster_name}"
 }
+
+data "aws_lb" "alb" {
+  arn = "${var.alb_arn}"
+}
