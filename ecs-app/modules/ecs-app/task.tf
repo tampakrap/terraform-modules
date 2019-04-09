@@ -11,4 +11,6 @@ resource "aws_ecs_task_definition" "application" {
   memory = "${var.memory}"
 
   container_definitions = "${module.container_definition.json}"
+
+  tags = "${local.tags}"
 }

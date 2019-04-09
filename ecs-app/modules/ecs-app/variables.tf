@@ -26,11 +26,6 @@ variable "alb_arn" {
   description = "application load balancer under which target group and services will be registered"
 }
 
-# variable "alb_security_group_ids" {
-#   description = "security groups of ALB to limit service ingress traffic to"
-#   type        = "list"
-# }
-
 variable "private_subnet_ids" {
   description = "list of private subnets where to provision services"
   type        = "list"
@@ -59,11 +54,6 @@ variable "cpu" {
 variable "memory" {
   description = "Hard limit of MEM for the task"
   default     = 1024
-}
-
-variable "service_capacity" {
-  description = "number of tasks that will be in the service"
-  default     = 1
 }
 
 variable "cluster_name" {

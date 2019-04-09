@@ -13,6 +13,8 @@ resource "aws_lb_target_group" "application" {
     path                = "${var.healthcheck_path}"
     matcher             = "${var.healthcheck_matcher}"
   }
+
+  tags = "${local.tags}"
 }
 
 data "aws_lb_listener" "selected443" {

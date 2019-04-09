@@ -17,6 +17,8 @@ resource "aws_iam_role" "ecs_task_execution" {
   ]
 }
 EOF
+
+  tags = "${local.tags}"
 }
 
 # ecr access (if ecr is created)
@@ -88,7 +90,7 @@ resource "aws_iam_role_policy_attachment" "application_logs" {
 # custom policy
 
 resource "aws_iam_policy" "service_policy" {
-  count       = "${var.policy == "" ?  0: 1}"
+  count       = "${var.policy == "" ? 0 : 1}"
   name        = "${local.name}"
   path        = "/"
   description = "Policy for service ${local.name}-admin"
@@ -97,7 +99,7 @@ resource "aws_iam_policy" "service_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "service_policy" {
-  count      = "${var.policy == "" ?  0: 1}"
+  count      = "${var.policy == "" ? 0 : 1}"
   role       = "${aws_iam_role.ecs_task_execution.id}"
   policy_arn = "${aws_iam_policy.service_policy.arn}"
 }

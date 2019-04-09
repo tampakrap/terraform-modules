@@ -5,7 +5,7 @@ resource "aws_appautoscaling_target" "ecs_target" {
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
 
-  depends_on = ["aws_ecs_service.application_autoscaled"]
+  depends_on = ["aws_ecs_service.application"]
 }
 
 /* metric used for auto scale */
@@ -27,6 +27,8 @@ resource "aws_cloudwatch_metric_alarm" "service_cpu_high" {
   alarm_actions = ["${aws_appautoscaling_policy.up.arn}"]
 
   depends_on = ["aws_appautoscaling_policy.up"]
+
+  tags = "${local.tags}"
 }
 
 resource "aws_cloudwatch_metric_alarm" "service_cpu_low" {
@@ -47,6 +49,8 @@ resource "aws_cloudwatch_metric_alarm" "service_cpu_low" {
   alarm_actions = ["${aws_appautoscaling_policy.down.arn}"]
 
   depends_on = ["aws_appautoscaling_policy.down"]
+
+  tags = "${local.tags}"
 }
 
 resource "aws_appautoscaling_policy" "up" {
