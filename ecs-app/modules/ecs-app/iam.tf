@@ -58,9 +58,9 @@ resource "aws_iam_role_policy_attachment" "ecr_repository" {
 # cloudwatch logs access
 
 resource "aws_iam_policy" "logs_policy" {
-  name        = "${local.name}-admin"
+  name        = "${local.name}-logs"
   path        = "/"
-  description = "Policy for service ${local.name}-admin"
+  description = "Policy for service ${local.name}-${var.name}"
 
   policy = <<EOF
 {
@@ -91,9 +91,9 @@ resource "aws_iam_role_policy_attachment" "application_logs" {
 
 resource "aws_iam_policy" "service_policy" {
   count       = "${var.policy == "" ? 0 : 1}"
-  name        = "${local.name}"
+  name        = "${local.name}-${var.name}"
   path        = "/"
-  description = "Policy for service ${local.name}-admin"
+  description = "Policy for service ${local.name}-${var.name}"
 
   policy = "${var.policy}"
 }
