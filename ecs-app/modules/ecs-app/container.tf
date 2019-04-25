@@ -5,8 +5,9 @@ module "container_definition" {
   container_name  = "${var.name}"
   container_image = "${var.image == "" ? aws_ecr_repository.application.repository_url : var.image}"
 
-  container_cpu    = "${var.cpu}"
-  container_memory = "${var.memory}"
+  container_cpu                = "${var.cpu}"
+  container_memory             = "${var.memory}"
+  container_memory_reservation = "${var.memory}"
 
   port_mappings = [
     {
