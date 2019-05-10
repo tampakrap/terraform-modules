@@ -128,7 +128,7 @@ resource "aws_cloudwatch_metric_alarm" "scaleUp" {
     id = "mem_utilization"
 
     metric {
-      metric_name = "Memory­Utilization"
+      metric_name = "MemoryUtilization"
       namespace   = "AWS/ECS"
       period      = "${var.alarm_period}"
       stat        = "Average"
@@ -143,7 +143,7 @@ resource "aws_cloudwatch_metric_alarm" "scaleUp" {
     id = "mem_reservation"
 
     metric {
-      metric_name = "Memory­Reservation"
+      metric_name = "MemoryReservation"
       namespace   = "AWS/ECS"
       period      = "${var.alarm_period}"
       stat        = "Average"
