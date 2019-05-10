@@ -4,11 +4,11 @@
 |------|-------------|:----:|:-----:|:-----:|
 | alb\_arn | application load balancer under which target group and services will be registered | string | n/a | yes |
 | app | app name | string | n/a | yes |
-| autoscaling | enable autoscaling | string | `"false"` | no |
 | cluster\_name | ecs cluster name where the services will be registered | string | n/a | yes |
 | cooldown |  | string | `"60"` | no |
 | cpu | Hard limit of CPU for the task | string | `"512"` | no |
 | environment |  | list | `<list>` | no |
+| healthcheck\_grace |  | string | `"0"` | no |
 | healthcheck\_healthy\_threshold |  | string | `"3"` | no |
 | healthcheck\_interval |  | string | `"60"` | no |
 | healthcheck\_matcher |  | string | `"200"` | no |
@@ -31,7 +31,6 @@
 | scale\_down |  | string | `"30"` | no |
 | scale\_up |  | string | `"80"` | no |
 | secrets |  | list | `<list>` | no |
-| service\_capacity | number of tasks that will be in the service | string | `"1"` | no |
 | stage | stage name | string | n/a | yes |
 | tags |  | map | `<map>` | no |
 | url | url for the alb listener | string | n/a | yes |
@@ -43,21 +42,3 @@
 |------|-------------|
 | ecr\_repository |  |
 
-
-
-
-## Resources
-| Resources |
-| --------- |
-| container definition |
-| task definition |
-| service |
-| target group + healtcheck |
-| task execution role |
-| ecr |
-| cloudwatch log group |
-| iam policy - write to logs |
-| iam policy - pull from ecr |
-| attachment of policies to the role - pass data / roles? |
-| security group |
-| listener_rule |
