@@ -7,10 +7,12 @@ module "container_definition" {
 
   container_cpu                = "${var.cpu}"
   container_memory_reservation = "${var.memory}"
+  container_memory             = ""
 
   port_mappings = [
     {
       containerPort = "${var.port}"
+      hostPort      = 0
       protocol      = "tcp"
     },
   ]

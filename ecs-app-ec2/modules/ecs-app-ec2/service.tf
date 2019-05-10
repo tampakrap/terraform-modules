@@ -14,12 +14,6 @@ resource "aws_ecs_service" "application" {
   deployment_minimum_healthy_percent = "${var.min_healthy}"
   health_check_grace_period_seconds  = "${var.healthcheck_grace}"
 
-  network_configuration {
-    subnets          = ["${var.private_subnet_ids}"]
-    security_groups  = ["${aws_security_group.application.id}"]
-    assign_public_ip = false
-  }
-
   load_balancer {
     container_name   = "${var.name}"
     container_port   = "${var.port}"
