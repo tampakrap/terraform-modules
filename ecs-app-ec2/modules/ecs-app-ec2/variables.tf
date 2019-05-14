@@ -138,3 +138,7 @@ variable "healthcheck_matcher" {
 variable "healthcheck_grace" {
   default = 0
 }
+
+variable "scheduling_strategy" {
+  default = "REPLICA"
+}

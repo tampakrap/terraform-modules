@@ -13,6 +13,7 @@ resource "aws_ecs_service" "application" {
   deployment_maximum_percent         = "${var.max_healthy}"
   deployment_minimum_healthy_percent = "${var.min_healthy}"
   health_check_grace_period_seconds  = "${var.healthcheck_grace}"
+  scheduling_strategy                = "${var.scheduling_strategy}"
 
   load_balancer {
     container_name   = "${var.name}"
