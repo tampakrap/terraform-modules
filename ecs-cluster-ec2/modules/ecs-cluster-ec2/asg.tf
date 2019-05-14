@@ -89,76 +89,17 @@ resource "aws_cloudwatch_metric_alarm" "scaleUp" {
   alarm_description   = "ECS cluster scaling metric above threshold"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "${var.evaluation_periods}"
+  metric_name         = "${var.scaling_metric_name}"
+  namespace           = "AWS/ECS"
+  statistic           = "Average"
+  period              = "${var.alarm_period}"
   threshold           = "${var.alarm_threshold_up}"
   actions_enabled     = "${var.alarm_actions_enabled}"
   count               = "${var.alarm_actions_enabled ? 1 : 0}"
   alarm_actions       = ["${aws_autoscaling_policy.up.arn}"]
 
-  metric_query {
-    id = "cpu_reservation"
-
-    metric {
-      metric_name = "CPUReservation"
-      namespace   = "AWS/ECS"
-      period      = "${var.alarm_period}"
-      stat        = "Average"
-
-      dimensions = {
-        ClusterName = "${var.cluster_name}"
-      }
-    }
-  }
-
-  metric_query {
-    id = "cpu_utilization"
-
-    metric {
-      metric_name = "CPUUtilization"
-      namespace   = "AWS/ECS"
-      period      = "${var.alarm_period}"
-      stat        = "Average"
-
-      dimensions = {
-        ClusterName = "${var.cluster_name}"
-      }
-    }
-  }
-
-  metric_query {
-    id = "mem_utilization"
-
-    metric {
-      metric_name = "MemoryUtilization"
-      namespace   = "AWS/ECS"
-      period      = "${var.alarm_period}"
-      stat        = "Average"
-
-      dimensions = {
-        ClusterName = "${var.cluster_name}"
-      }
-    }
-  }
-
-  metric_query {
-    id = "mem_reservation"
-
-    metric {
-      metric_name = "MemoryReservation"
-      namespace   = "AWS/ECS"
-      period      = "${var.alarm_period}"
-      stat        = "Average"
-
-      dimensions = {
-        ClusterName = "${var.cluster_name}"
-      }
-    }
-  }
-
-  metric_query {
-    id          = "max"
-    label       = "CpuOrMemUtilization"
-    expression  = "MAX(METRICS())"
-    return_data = "true"
+  dimensions {
+    ClusterName = "${var.cluster_name}"
   }
 }
 
@@ -247,8 +188,8 @@ variable "tags" {
 
   default = [
     {
-      key                 = "created_by"
-      value               = "terraform"
+      key                 = "Terraform"
+      value               = "true"
       propagate_at_launch = true
     },
   ]
